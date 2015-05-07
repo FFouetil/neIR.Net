@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRnetApp", "IRnetApp\IRnetApp.csproj", "{1E835411-23B9-4CFB-9585-B71A6033613A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "neIR.Net", "IRnetApp\neIR.Net.csproj", "{1E835411-23B9-4CFB-9585-B71A6033613A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6D4F531F-483F-47B9-8C07-856D6F376B25} = {6D4F531F-483F-47B9-8C07-856D6F376B25}
 	EndProjectSection

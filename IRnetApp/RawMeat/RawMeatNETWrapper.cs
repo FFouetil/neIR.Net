@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using FreeImageAPI;
 
+
 namespace RawMeat
 {
-    class RawMeatNETWrapper
+
+    class SafeNativeMethods
     {
-        
+
         [DllImport("RawMeat", CharSet = CharSet.Ansi, EntryPoint = "RawMeat_LoadUnprocessedRaw", CallingConvention = CallingConvention.Cdecl)]
         internal static extern FIBITMAP LoadUnprocessedRaw(string fullpath);
 

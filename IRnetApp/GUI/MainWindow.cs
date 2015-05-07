@@ -18,10 +18,8 @@ using System.Threading;
 
 namespace neIR
 {
-
     public partial class MainWindow : Form
     {
-
         #region Members
         //private string m_filetypeFilter;        
         private string m_commonTypesFilter = "Common Image Files(*.BMP;*.JPG;*.GIF;*.PNG;*.TIFF)|*.BMP;*.JPG;*.GIF;*.PNG;*.TIFF";
@@ -70,24 +68,19 @@ namespace neIR
 
         #region Constructors and Inits
         public MainWindow()
-        {
-            
+        {            
             InitializeComponent();
             m_rawFilter = Helpers.CreateFileTypeFilter(m_rawFilter, m_rawFilterExtensions, " ");
 
-
             this.displayStrip_showAsGreyscale.Enabled = true;
             this.displayStrip_showDebayered.Enabled = true;
-            this.displayStrip_showSplitChannels.Enabled = true;
-
-            
+            this.displayStrip_showSplitChannels.Enabled = true;            
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
             this.DoubleBuffered = true;
-            this.ResizeRedraw = false;
-            
+            this.ResizeRedraw = false;            
         }
         #endregion
 
@@ -194,7 +187,6 @@ namespace neIR
         #endregion
 
         #region Display
-
         internal void SetStatusMessage(string message, Color color)
         {
             this.StatusMessage.ForeColor = color;
@@ -206,7 +198,6 @@ namespace neIR
             SetStatusMessage(message, Color.Black);
         }
 
-
         /// <summary>
         /// Switches to the views corresponding to the requested DisplayMode
         /// </summary>
@@ -217,7 +208,6 @@ namespace neIR
             //single view
             if (displayMode == DisplayMode.Debayered || displayMode == DisplayMode.Greyscale)
             {
-
                 m_bigPictureBox.Enabled = true;
                 m_bigPictureBox.Visible = true;
                 quadView.Visible = false;
@@ -228,7 +218,6 @@ namespace neIR
             //quad view
             else if (displayMode == DisplayMode.Split)
             {
-
                 quadView.Enabled = true;
                 quadView.Visible = true;                
                 m_bigPictureBox.Enabled = false;
@@ -327,12 +316,14 @@ namespace neIR
                     {
                         return m_rawBayer.BayerToColorBitmap();
                     });
+                    Console.WriteLine("DeBayeredBMPIsLoaded: " + m_rawBayer.DeBayeredBMPIsLoaded);
                 }
                 else if ( m_rawBayer.RunningTasks.HasFlag(ActivityFlags.LoadingDebayered) )
                 {
                     SetStatusMessage(loadMsg + " still in progress.");
                 }
             }
+            
 
   
             m_bigPictureBox.Image = m_rgbImage;
@@ -352,7 +343,7 @@ namespace neIR
                     while (m_rawBayer.RunningTasks.HasFlag(ActivityFlags.LoadingGreyscale) );
                     return  m_rawBayer.BayerToGreyscaleBitmap();
                 });
-                
+                Console.WriteLine("GreyscaleBayerIsLoaded: " + m_rawBayer.GreyscaleBayerIsLoaded);
             }
             m_bigPictureBox.Image = m_bayerImage;
             Invalidate();
@@ -408,12 +399,12 @@ namespace neIR
 
         #region GUI Events
 
-
         /// <summary>
         /// Opens a file dialog to pick an image to load, then displays it.
         /// </summary>
         private async void fileMenu_open_Click(object sender, EventArgs e)
         {
+            
 
             OpenFileDialog fileOpen = new OpenFileDialog();
             fileOpen.Filter = m_rawFilter + "|" + m_commonTypesFilter;
@@ -436,6 +427,8 @@ namespace neIR
                     else if (FileIsRaw())
                     {
                         m_curFile_locked = true;
+
+                        //FreeImage.Allocate(5, 5, 5);
                         m_rawBayer = await BayerImage.LoadFromFile_Async(m_curFileInfo.FullName,PreloadModes.All);
                         Invalidate();
                         //LoadDebayered_Async();

@@ -208,12 +208,18 @@ namespace RawMeat
         {
             if (!UnprocessedBayerIsLoaded && !RunningTasks.HasFlag(ActivityFlags.LoadingUnprocessed) )
             {
+                
                 RunningTasks |= ActivityFlags.LoadingUnprocessed;
-                try { m_unprocessedBayer = RawMeatNETWrapper.LoadUnprocessedRaw(fullPath); }
+                try { m_unprocessedBayer = SafeNativeMethods.LoadUnprocessedRaw(fullPath); }
                 catch (FileLoadException ex)
                 {
                     string errMsg = "Error reading file '" + fullPath + "'";
                     Console.WriteLine(errMsg);
+                }
+                catch (Exception otherEx)                {
+                    
+                    Console.WriteLine(otherEx.Message);
+                    throw;
                 }
                 finally
                 {
@@ -251,7 +257,7 @@ namespace RawMeat
                 //unload previously loaded images
                 //UnloadFreeImageBitmaps();
                 bool autoScale = (processingModes & RawProcessingModes.RawProcess_AutoScale) != 0;
-                m_splitBayer = RawMeatNETWrapper.SplitBayerChannels(m_unprocessedBayer, true, autoScale);
+                m_splitBayer = SafeNativeMethods.SplitBayerChannels(m_unprocessedBayer, true, autoScale);
     
                 LastChannelProcessingModes=processingModes;
                 RunningTasks &= ~ActivityFlags.LoadingSplitChannels;                
@@ -411,28 +417,32 @@ namespace RawMeat
             //if debayering already in progress, wait for result
             if ( RunningTasks.HasFlag(ActivityFlags.LoadingDebayered) ){
                 Console.WriteLine("Debayer from file -> Already running");
-                while (RunningTasks.HasFlag(ActivityFlags.LoadingDebayered));                
+                while (RunningTasks.HasFlag(ActivityFlags.LoadingDebayered));
+                Console.WriteLine("Debayer from file -> Stopped running");
             }
 
-            if (DeBayeredIsLoaded) return m_deBayeredBmp;
+            Bitmap result = m_deBayeredBmp;
 
-            Bitmap result = null;            
+            if (DeBayeredBMPIsLoaded) return result;                    
 
-            if ( fromUnprocessed ){
+            /*if ( fromUnprocessed ){
                 if ( DeBayeredIsLoaded || LoadDebayered_FromUnprocessed() ){
                     result = FreeImage.GetBitmap(m_deBayered);                        
                 }
                 else throw new Exception("Debayer from unprocessed RAW failed");
             }
-            else
+            else*/
             {
 
-                if ( DeBayeredIsLoaded || LoadDebayered_FromLoadedFile() )
+                if (DeBayeredBMPIsLoaded || LoadDebayered_FromLoadedFile())
                 {
                     result = m_deBayeredBmp;   
                 }
-                else if ( !RunningTasks.HasFlag(ActivityFlags.LoadingDebayered) )
+                else if (!RunningTasks.HasFlag(ActivityFlags.LoadingDebayered))
+                {
                     throw new Exception("Debayer from file failed");
+                }
+                    
             }                    
 
             return result;   

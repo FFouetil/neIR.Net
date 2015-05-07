@@ -17,6 +17,7 @@
             {
                 components.Dispose();
             }
+            m_dummyForLoading.Dispose();
             base.Dispose(disposing);
         }
 
