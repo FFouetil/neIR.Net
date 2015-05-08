@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "RawMeat.h"
+#include <iostream>
 
 
 using namespace std;
@@ -28,11 +29,19 @@ static bool bayerIsSplit = false;
 //pointer to channel array
 static FIBITMAP* bayerChannels[4];
 
-RAWMEAT_API FIBITMAP* RawMeat_LoadUnprocessedRaw(const char* fullpath){
-	return FreeImage_Load(FIF_RAW, fullpath, RAW_UNPROCESSED);
+
+RAWMEAT_API FIBITMAP* RawMeat_LoadUnprocessedRaw(const char* fullpath, bool cropFrame){
+
+	FIBITMAP* unprocessed = FreeImage_Load(FIF_RAW, fullpath, RAW_UNPROCESSED);
+	if (!cropFrame) return unprocessed;
+
+	FIBITMAP* cropped = RawMeat_UnprocessedBayer_CropFrame(unprocessed);
+	FreeImage_Unload(unprocessed);
+
+	return cropped;
 }
 
-RAWMEAT_API FIBITMAP* RawMeat_GetBayerChannel(FIBITMAP* bayerImage, int channelIndex){
+RAWMEAT_API FIBITMAP* RawMeat_GetBayerChannel(FIBITMAP* bayerImage, int channelIndex) {
 	
 	//if image bayer not split yet, split it 
 	if (!bayerIsSplit)
@@ -55,16 +64,75 @@ RAWMEAT_API FIBITMAP* RawMeat_GetBayerChannel(FIBITMAP* bayerImage, int channelI
 	return NULL;
 }
 
-RAWMEAT_API const char* RawMeat_BayerPatternToString(FIBITMAP* bayerImage, bool endsWithNewLine){
-		
-	FITAG* tag = NULL;
-	FreeImage_GetMetadata(FIMD_COMMENTS, bayerImage, "Raw.BayerPattern", &tag);
-	const char* bayerPattern=FreeImage_TagToString(FIMD_COMMENTS, tag);
+RAWMEAT_API const char* RawMeat_GetFIMDComments(FIBITMAP* unprocessedBayerImage, const char* key){
 
+	FITAG* tag = NULL;
+	char* value=NULL;
+	if (FreeImage_GetMetadata(FIMD_COMMENTS, unprocessedBayerImage, key, &tag))
+		value = (char*)FreeImage_TagToString(FIMD_COMMENTS, tag);
+	else
+		value = "";
+
+	return value;
+}
+
+RAWMEAT_API const char* RawMeat_GetBayerPattern(FIBITMAP* bayerImage, bool endsWithNewLine){
+
+	const char* bayerPattern = RawMeat_GetFIMDComments(bayerImage, "Raw.BayerPattern");	
 	static string str = string(bayerPattern).substr(0,4);
 	if (endsWithNewLine) str+="\n";
 
 	return  str.c_str();		
+}
+
+RAWMEAT_API const UINT RawMeat_GetOutputWidth(FIBITMAP* unprocessedBayerImage){
+	
+	const char* widthStr = RawMeat_GetFIMDComments(unprocessedBayerImage, "Raw.Output.Width");
+	const UINT width = (UINT)strtoul(widthStr, NULL, 10);
+
+	return  width;
+}
+
+RAWMEAT_API const UINT RawMeat_GetOutputHeight(FIBITMAP* unprocessedBayerImage){
+
+	const char* heightStr = RawMeat_GetFIMDComments(unprocessedBayerImage, "Raw.Output.Height");
+	const UINT height = (UINT)strtoul(heightStr, NULL, 10);
+
+	return  height;
+}
+
+RAWMEAT_API const UINT RawMeat_GetTopFrame(FIBITMAP* unprocessedBayerImage){
+	
+	const char* topFrameHeightStr = RawMeat_GetFIMDComments(unprocessedBayerImage, "Raw.Frame.Top");
+	const UINT height = (UINT)strtoul(topFrameHeightStr, NULL, 10);
+
+	return  height;
+}
+
+RAWMEAT_API const UINT RawMeat_GetLeftFrame(FIBITMAP* unprocessedBayerImage){
+
+	const char* leftFrameWidthStr = RawMeat_GetFIMDComments(unprocessedBayerImage, "Raw.Frame.Left");
+	const UINT width = (UINT)strtoul(leftFrameWidthStr, NULL, 10);
+
+	return  width;
+}
+
+RAWMEAT_API FIBITMAP* RawMeat_UnprocessedBayer_CropFrame(FIBITMAP* unprocessedBayerImage){
+
+	const int topFrame = (int)RawMeat_GetTopFrame(unprocessedBayerImage);
+	const int leftFrame = (int)RawMeat_GetLeftFrame(unprocessedBayerImage);
+	const int width = (int)RawMeat_GetOutputWidth(unprocessedBayerImage);
+	const int height = (int)RawMeat_GetOutputHeight(unprocessedBayerImage);
+
+	FIBITMAP* cropped = NULL;
+	try{
+		cropped = FreeImage_Copy(unprocessedBayerImage, leftFrame, topFrame, leftFrame + width, topFrame + height);
+	}
+	catch (exception ex){
+		printf("Cropping error");
+	}
+
+	return cropped;
 }
 
 //Processes Bayer bitmap to put each channel in memory, then returns the channel array
@@ -99,13 +167,14 @@ RAWMEAT_API FIBITMAP** RawMeat_SplitBayerChannels(FIBITMAP* bayerImage, bool for
 			if (max < ((WORD*)bits)[p])
 				max = ((WORD*)bits)[p];
 
-		unsigned dynamicRange = 16;
+		unsigned dynamicRange = 1;
 		
 		if (max > 0 && max < 1 << 15)
 		{
-			//while (max <(unsigned)(1 << 15) && dynamicRange <= 15 ) dynamicRange++;
+			while (max <(unsigned)(1 << 15) && dynamicRange <= 15 ) dynamicRange++;
 			valueScale = (1 << ( dynamicRange) ) / max;
-			//printf("Valuescale %u - Range %d", valueScale, dynamicRange);		
+
+			printf_s("Valuescale %u - Range %d", valueScale, dynamicRange);				
 		}
 
 	}
@@ -147,7 +216,7 @@ RAWMEAT_API FIBITMAP** RawMeat_SplitBayerChannels(FIBITMAP* bayerImage, bool for
 RAWMEAT_API void RawMeat_testFunc_ExportChannelsToPNG
 	(FIBITMAP* bayerImage, bool channel0, bool channel1 , bool channel2, bool channel3)
 {
-	printf(RawMeat_BayerPatternToString( bayerImage));
+	printf(RawMeat_GetBayerPattern( bayerImage));
 
 	if (channel0)
 		FreeImage_Save(FIF_PNG, bayerChannels[0], "../../../vrac/OUT/outTest_c0.png"); printf("Channel#0 saved as PNG\n");

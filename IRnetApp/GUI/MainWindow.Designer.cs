@@ -37,12 +37,12 @@
             this.StatusMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_bigPictureBox = new System.Windows.Forms.PictureBox();
             this.toolStrip_displayModes = new System.Windows.Forms.ToolStrip();
+            this.displayStrip_showDebayered = new System.Windows.Forms.ToolStripButton();
             this.displayStrip_showAsGreyscale = new System.Windows.Forms.ToolStripButton();
             this.displayStrip_showSplitChannels = new System.Windows.Forms.ToolStripButton();
-            this.quadView = new neIR.QuadView();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.displayStrip_showDebayered = new System.Windows.Forms.ToolStripButton();
             this.toolStrip_clearButton = new System.Windows.Forms.ToolStripButton();
+            this.quadView = new neIR.QuadView();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_bigPictureBox)).BeginInit();
@@ -116,6 +116,16 @@
             this.toolStrip_displayModes.TabIndex = 5;
             this.toolStrip_displayModes.Text = "toolStrip1";
             // 
+            // displayStrip_showDebayered
+            // 
+            this.displayStrip_showDebayered.Enabled = false;
+            this.displayStrip_showDebayered.Image = ((System.Drawing.Image)(resources.GetObject("displayStrip_showDebayered.Image")));
+            this.displayStrip_showDebayered.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.displayStrip_showDebayered.Name = "displayStrip_showDebayered";
+            this.displayStrip_showDebayered.Size = new System.Drawing.Size(122, 22);
+            this.displayStrip_showDebayered.Text = "Debayered as RGB";
+            this.displayStrip_showDebayered.Click += new System.EventHandler(this.displayStrip_showDebayered_Click);
+            // 
             // displayStrip_showAsGreyscale
             // 
             this.displayStrip_showAsGreyscale.Enabled = false;
@@ -136,29 +146,10 @@
             this.displayStrip_showSplitChannels.Text = "Split Bayer channels";
             this.displayStrip_showSplitChannels.Click += new System.EventHandler(this.displayStrip_showSplitChannels_Click);
             // 
-            // quadView
-            // 
-            this.quadView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.quadView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.quadView.Location = new System.Drawing.Point(0, 49);
-            this.quadView.Name = "quadView";
-            this.quadView.Size = new System.Drawing.Size(784, 371);
-            this.quadView.TabIndex = 3;
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // displayStrip_showDebayered
-            // 
-            this.displayStrip_showDebayered.Enabled = false;
-            this.displayStrip_showDebayered.Image = ((System.Drawing.Image)(resources.GetObject("displayStrip_showDebayered.Image")));
-            this.displayStrip_showDebayered.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.displayStrip_showDebayered.Name = "displayStrip_showDebayered";
-            this.displayStrip_showDebayered.Size = new System.Drawing.Size(122, 22);
-            this.displayStrip_showDebayered.Text = "Debayered as RGB";
-            this.displayStrip_showDebayered.Click += new System.EventHandler(this.displayStrip_showDebayered_Click);
             // 
             // toolStrip_clearButton
             // 
@@ -168,6 +159,15 @@
             this.toolStrip_clearButton.Size = new System.Drawing.Size(65, 22);
             this.toolStrip_clearButton.Text = "Unload";
             this.toolStrip_clearButton.Click += new System.EventHandler(this.toolStrip_clearButton_Click);
+            // 
+            // quadView
+            // 
+            this.quadView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.quadView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.quadView.Location = new System.Drawing.Point(0, 49);
+            this.quadView.Name = "quadView";
+            this.quadView.Size = new System.Drawing.Size(784, 371);
+            this.quadView.TabIndex = 3;
             // 
             // MainWindow
             // 

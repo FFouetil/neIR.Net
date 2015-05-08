@@ -10,11 +10,12 @@ using System.IO;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Threading;
 
 using FreeImageAPI;
 using RawMeat;
-using System.Threading.Tasks;
-using System.Threading;
+
 
 namespace neIR
 {
@@ -61,10 +62,7 @@ namespace neIR
 
         private enum DisplayMode { Debayered, Greyscale, Split};
         private DisplayMode m_displayMode = DisplayMode.Split;
-
         #endregion
-        // private Accord.Extensions.Imaging.IplImage;
-        // private Accord.Imaging.Converters.ImageToMatrix ddd;
 
         #region Constructors and Inits
         public MainWindow()
@@ -80,7 +78,8 @@ namespace neIR
         private void MainWindow_Load(object sender, EventArgs e)
         {
             this.DoubleBuffered = true;
-            this.ResizeRedraw = false;            
+            this.ResizeRedraw = true;       
+            
         }
         #endregion
 
@@ -141,7 +140,6 @@ namespace neIR
                     }
                     else
                         SetStatusMessage(loadMsg + " Error!", Color.Red);
-
                 }
 
             }
@@ -174,7 +172,9 @@ namespace neIR
             {
                 m_rawBayer.UnloadFreeImageBitmaps();
                 m_rawBayer = null;
-            }                
+                
+            }
+            GC.Collect(3, GCCollectionMode.Forced, false);
         }
 
         private void UnloadWindowsBitmaps()
@@ -478,9 +478,7 @@ namespace neIR
 
         private void toolStrip_clearButton_Click(object sender, EventArgs e)
         {
-            UnloadFreeImageBitmaps();
-            UnloadWindowsBitmaps();
-            ClearPictureBoxes(false);            
+            ClearPictureBoxes(true);            
         }
         #endregion
 

@@ -14,7 +14,7 @@ namespace RawMeat
     {
 
         [DllImport("RawMeat", CharSet = CharSet.Ansi, EntryPoint = "RawMeat_LoadUnprocessedRaw", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern FIBITMAP LoadUnprocessedRaw(string fullpath);
+        internal static extern FIBITMAP LoadUnprocessedRaw(string fullpath, bool cropFrame);
 
         [DllImport("RawMeat", EntryPoint = "RawMeat_SplitBayerChannels", CallingConvention = CallingConvention.Cdecl)]
         //[return: MarshalAs(UnmanagedType.ByValArray,SizeConst=4,ArraySubType=UnmanagedType.LPStruct)]

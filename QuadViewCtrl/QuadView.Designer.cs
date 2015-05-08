@@ -31,15 +31,11 @@ namespace neIR
         private void InitializeComponent()
         {
             this.quadViewPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.topLeftBox = new ZoomablePictureBox();
-            this.topRightBox = new ZoomablePictureBox();
-            this.bottomLeftBox = new ZoomablePictureBox();
-            this.bottomRightBox = new ZoomablePictureBox();
+            this.topLeftBox = new ZoomablePictureBoxCtrl.ZoomablePictureBox();
+            this.topRightBox = new ZoomablePictureBoxCtrl.ZoomablePictureBox();
+            this.bottomLeftBox = new ZoomablePictureBoxCtrl.ZoomablePictureBox();
+            this.bottomRightBox = new ZoomablePictureBoxCtrl.ZoomablePictureBox();
             this.quadViewPanel.SuspendLayout();
-            /*((System.ComponentModel.ISupportInitialize)(this.topLeftBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.topRightBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bottomLeftBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bottomRightBox)).BeginInit();*/
             this.SuspendLayout();
             // 
             // quadViewPanel
@@ -65,12 +61,13 @@ namespace neIR
             // topLeftBox
             // 
             this.topLeftBox.AccessibleName = "QuadView";
+            this.topLeftBox.Border = System.Windows.Forms.BorderStyle.FixedSingle;
             this.topLeftBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.topLeftBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.topLeftBox.Image = null;
             this.topLeftBox.Location = new System.Drawing.Point(3, 3);
             this.topLeftBox.Name = "topLeftBox";
             this.topLeftBox.Size = new System.Drawing.Size(314, 234);
-           // this.topLeftBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.topLeftBox.TabIndex = 0;
             this.topLeftBox.TabStop = false;
             this.topLeftBox.MouseEnter += new System.EventHandler(this.topLeftBox_MouseEnter);
@@ -78,12 +75,13 @@ namespace neIR
             // topRightBox
             // 
             this.topRightBox.AccessibleName = "QuadView";
+            this.topRightBox.Border = System.Windows.Forms.BorderStyle.FixedSingle;
             this.topRightBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.topRightBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.topRightBox.Image = null;
             this.topRightBox.Location = new System.Drawing.Point(323, 3);
             this.topRightBox.Name = "topRightBox";
             this.topRightBox.Size = new System.Drawing.Size(314, 234);
-            //this.topRightBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.topRightBox.TabIndex = 1;
             this.topRightBox.TabStop = false;
             this.topRightBox.MouseEnter += new System.EventHandler(this.topRightBox_MouseEnter);
@@ -91,12 +89,13 @@ namespace neIR
             // bottomLeftBox
             // 
             this.bottomLeftBox.AccessibleName = "QuadView";
+            this.bottomLeftBox.Border = System.Windows.Forms.BorderStyle.FixedSingle;
             this.bottomLeftBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.bottomLeftBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bottomLeftBox.Image = null;
             this.bottomLeftBox.Location = new System.Drawing.Point(3, 243);
             this.bottomLeftBox.Name = "bottomLeftBox";
             this.bottomLeftBox.Size = new System.Drawing.Size(314, 234);
-           // this.bottomLeftBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.bottomLeftBox.TabIndex = 2;
             this.bottomLeftBox.TabStop = false;
             this.bottomLeftBox.MouseEnter += new System.EventHandler(this.bottomLeftBox_MouseEnter);
@@ -104,12 +103,13 @@ namespace neIR
             // bottomRightBox
             // 
             this.bottomRightBox.AccessibleName = "QuadView";
+            this.bottomRightBox.Border = System.Windows.Forms.BorderStyle.FixedSingle;
             this.bottomRightBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.bottomRightBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bottomRightBox.Image = null;
             this.bottomRightBox.Location = new System.Drawing.Point(323, 243);
             this.bottomRightBox.Name = "bottomRightBox";
             this.bottomRightBox.Size = new System.Drawing.Size(314, 234);
-            //this.bottomRightBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.bottomRightBox.TabIndex = 3;
             this.bottomRightBox.TabStop = false;
             this.bottomRightBox.MouseEnter += new System.EventHandler(this.bottomRightBox_MouseEnter);
@@ -119,13 +119,10 @@ namespace neIR
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.quadViewPanel);
+            this.DoubleBuffered = true;
             this.Name = "QuadView";
             this.Size = new System.Drawing.Size(640, 480);
             this.quadViewPanel.ResumeLayout(false);
-            /*((System.ComponentModel.ISupportInitialize)(this.topLeftBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.topRightBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bottomLeftBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bottomRightBox)).EndInit();*/
             this.ResumeLayout(false);
             this.PerformLayout();
 

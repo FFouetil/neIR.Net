@@ -12,6 +12,7 @@ using System.Threading;
 
 namespace RawMeat
 {
+    #region Enums
     [Flags]
     public enum PreloadModes
     {
@@ -22,17 +23,17 @@ namespace RawMeat
     [Flags]
     public enum ActivityFlags {
         Idle=0, None=Idle,
-        LoadingUnprocessed=1, LoadingGreyscale=2, LoadingSplitChannels=4, LoadingDebayered=8,              
+        LoadingUnprocessed = 1, LoadingGreyscale = 2, LoadingSplitChannels = 4, LoadingDebayered = 8,              
         LoadingAny = LoadingUnprocessed | LoadingGreyscale | LoadingSplitChannels | LoadingDebayered,
         FreeingUnprocessed = 16, FreeingGreyscale = 32, FreeingSplitChannels = 64, FreeingDebayered = 128,
         FreeingAny = FreeingUnprocessed | FreeingGreyscale | FreeingSplitChannels | FreeingDebayered,
         LoadingOrFreeingAny = LoadingAny | FreeingAny,
         ConvertingChannelsToBitmaps = 512,
         ReadingFile = 1024
-
     }
+    #endregion
 
-    class BayerImage
+    class BayerImage : IDisposable
     {
         #region Fields
 
@@ -74,8 +75,6 @@ namespace RawMeat
         #endregion
 
         #region Constructors, Init and Destructors
-
-
         private BayerImage(FileInfo fileInfo)
         {
             RAWFileInfo = fileInfo;
@@ -84,7 +83,15 @@ namespace RawMeat
 
         ~BayerImage()
         {
+            Debug.WriteLine("Destroying BayerImage");
             UnloadFreeImageBitmaps();
+        }
+
+        public void Dispose()
+        {
+            Debug.WriteLine("Disposing BayerImage");
+            UnloadFreeImageBitmaps();
+            
         }
 
         /// <summary>
@@ -210,7 +217,7 @@ namespace RawMeat
             {
                 
                 RunningTasks |= ActivityFlags.LoadingUnprocessed;
-                try { m_unprocessedBayer = SafeNativeMethods.LoadUnprocessedRaw(fullPath); }
+                try { m_unprocessedBayer = SafeNativeMethods.LoadUnprocessedRaw(fullPath,true); }
                 catch (FileLoadException ex)
                 {
                     string errMsg = "Error reading file '" + fullPath + "'";
@@ -364,9 +371,10 @@ namespace RawMeat
                 return LoadDebayered_FromLoadedFile();
             });
         }
-        
+
         #endregion
 
+        #region Convertions
         /// <summary>
         /// Converts the 4 FIBitmap channels to Windows Bitmap format for PictureBoxes
         /// </summary>
@@ -447,6 +455,13 @@ namespace RawMeat
 
             return result;   
         }
+
+        public void test()
+        {
+            
+        }
         
     }
+
+    #endregion
 }

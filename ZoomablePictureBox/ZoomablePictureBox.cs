@@ -60,41 +60,41 @@ namespace ZoomablePictureBoxCtrl
 
         private void InitializeComponent()
         {
-        this.PicBox = new PixelBox();
-        this.OuterPanel = new System.Windows.Forms.Panel();
-        ((System.ComponentModel.ISupportInitialize)(this.PicBox)).BeginInit();
-        this.OuterPanel.SuspendLayout();
-        this.SuspendLayout();
-        // 
-        // PicBox
-        // 
-        this.PicBox.Location = new System.Drawing.Point(0, 0);
-        this.PicBox.Name = "PicBox";
-        this.PicBox.Size = new System.Drawing.Size(149, 128);
-        this.PicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-        this.PicBox.TabIndex = 3;
-        this.PicBox.TabStop = false;
-
-        // 
-        // OuterPanel
-        // 
-        this.OuterPanel.AutoScroll = true;
-        this.OuterPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-        this.OuterPanel.Controls.Add(this.PicBox);
-        this.OuterPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-        this.OuterPanel.Location = new System.Drawing.Point(0, 0);
-        this.OuterPanel.Name = "OuterPanel";
-        this.OuterPanel.Size = new System.Drawing.Size(210, 190);
-        this.OuterPanel.TabIndex = 4;
-        // 
-        // ZoomablePictureBox
-        // 
-        this.Controls.Add(this.OuterPanel);
-        this.Name = "ZoomablePictureBox";
-        this.Size = new System.Drawing.Size(210, 190);
-        ((System.ComponentModel.ISupportInitialize)(this.PicBox)).EndInit();
-        this.OuterPanel.ResumeLayout(false);
-        this.ResumeLayout(false);
+            this.OuterPanel = new System.Windows.Forms.Panel();
+            this.PicBox = new ZoomablePictureBoxCtrl.PixelBox();
+            this.OuterPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PicBox)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // OuterPanel
+            // 
+            this.OuterPanel.AutoScroll = true;
+            this.OuterPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.OuterPanel.Controls.Add(this.PicBox);
+            this.OuterPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OuterPanel.Location = new System.Drawing.Point(0, 0);
+            this.OuterPanel.Name = "OuterPanel";
+            this.OuterPanel.Size = new System.Drawing.Size(210, 190);
+            this.OuterPanel.TabIndex = 4;
+            // 
+            // PicBox
+            // 
+            this.PicBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
+            this.PicBox.Location = new System.Drawing.Point(0, 0);
+            this.PicBox.Name = "PicBox";
+            this.PicBox.Size = new System.Drawing.Size(149, 145);
+            this.PicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PicBox.TabIndex = 3;
+            this.PicBox.TabStop = false;
+            // 
+            // ZoomablePictureBox
+            // 
+            this.Controls.Add(this.OuterPanel);
+            this.Name = "ZoomablePictureBox";
+            this.Size = new System.Drawing.Size(210, 190);
+            this.OuterPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.PicBox)).EndInit();
+            this.ResumeLayout(false);
 
         }
         #endregion
@@ -105,6 +105,7 @@ namespace ZoomablePictureBoxCtrl
         {
             InitializeComponent();
             InitCtrl();	// my special settings for the ctrl
+            ResizeRedraw = false;
 
 #if DEBUG   //display PictureBox area borders for testing
             this.PicBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;

@@ -28,17 +28,29 @@ extern RAWMEAT_API int fnRawMeat(void);
 */
 
 extern "C"{
+
 	//Shortcut for loading an un-deBayered RAW file. Alias for FreeImage 16bpp unprocessed RAW loading
-	RAWMEAT_API FIBITMAP* RawMeat_LoadUnprocessedRaw(const char* fullpath);
+	RAWMEAT_API FIBITMAP* RawMeat_LoadUnprocessedRaw(const char* fullpath, bool cropFrame);
+	//Returns a copy of the unprocessed RAW without its frame
+	RAWMEAT_API FIBITMAP* RawMeat_UnprocessedBayer_CropFrame(FIBITMAP* unprocessedBayerImage);
 	//Returns a 4-slots array of FIBITMAPs, one for each channel. 1st call is slower (processing).
 	//ForceProcessing makes it ignore that an image is already loaded: you're responsible for deallocating the previous one.
 	RAWMEAT_API FIBITMAP** RawMeat_SplitBayerChannels(FIBITMAP* bayerImage, bool forceProcessing = false, bool autoscale = true);
 	//! Untested ! Returns a FIBITMAP corresponding to the specified channel. Automatically calls the split function if not yet processed
 	RAWMEAT_API FIBITMAP* RawMeat_GetBayerChannel(FIBITMAP* bayerImage, int channelIndex);
 	//Returns a 4-character string describing the detected Bayer pattern
-	RAWMEAT_API const char* RawMeat_BayerPatternToString(FIBITMAP* bayerImage, bool endsWithNewLine = true);
+	RAWMEAT_API const char* RawMeat_GetBayerPattern(FIBITMAP* bayerImage, bool endsWithNewLine = true);
 	//Deallocates the memory used by the 4 cached channels - WIP: can cause memory errors
 	RAWMEAT_API bool RawMeat_DeallocateChannels();
+
+	//Returns the width of the frameless image 
+	RAWMEAT_API const UINT RawMeat_GetOutputWidth(FIBITMAP* unprocessedBayerImage);
+	//Returns the height of the frameless image 
+	RAWMEAT_API const UINT RawMeat_GetOutputHeight(FIBITMAP* unprocessedBayerImage);
+	//Returns the width of the left frame
+	RAWMEAT_API const UINT RawMeat_GetLeftFrame(FIBITMAP* unprocessedBayerImage);
+	//Returns the height of the top frame
+	RAWMEAT_API const UINT RawMeat_GetTopFrame(FIBITMAP* unprocessedBayerImage);
 
 
 	//--------- test calls
